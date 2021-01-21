@@ -37,15 +37,15 @@ function handleBullets(){
 function spwnBullet(){
   let xDiff =  mouseX - playerX;
   let yDiff = mouseY - playerY;
-  let xSpeed = map(xDiff, -width/2, width, width/2, -10, 10);
-  let ySpeed = map(yDiff, -height/2, height, height/2, -10, 10);
+  let xSpeed = map(xDiff, -width/2, width/2, -10, 10);
+  let ySpeed = map(yDiff, -height/2, height/2, -10, 10);
 
   let bullet = {
     x: playerX,
     y: playerY,
     radius: 20,
-    dx: xDiff,
-    dy: yDiff,
+    dx: xSpeed,
+    dy: ySpeed,
   }
   bullets.push(bullet);
 }
