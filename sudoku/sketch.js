@@ -14,8 +14,13 @@ let numberSet = [1,2,3,4,5,6,7,8,9]
 let isKeyInsert = false;
 let keyEntered;
 let rowNumbers;
-let testSet = new Set([1,2,3,4,5])
 let foundRepeat;
+let colNumbers;
+let verRepeat = false;
+let horRepeat = false;
+let squareNumber;
+let sqrRepeat = false;
+
 
 function setup() {
   if (windowWidth > windowHeight){
@@ -38,15 +43,38 @@ function draw() {
   background('green');
   drawGrid();
   displayNumber();
-  checkVerRepeat()
+ // checkVerRepeat()
 }
 
-function checkVerRepeat(){
+function checkHorRepeat(){
   keyEntered = key;
   let y = selectedGrid[1]
   rowNumbers = new Set(grid[y])
 
   if (rowNumbers.has(keyEntered.toString())){
+    horRepeat = true
+  }
+  else{
+    horRepeat = false;
+  }
+}
+
+function checkVerRepeat(){
+  let x = selectedGrid[0]
+  colNumbers = new Set()
+  for(let y=0;y<9;y++){
+    colNumbers.add(grid[y][x])
+  }
+  if (colNumbers.has(keyEntered.toString())){
+    verRepeat = true
+  }
+  else{
+    verRepeat = false;
+  }
+}
+
+function checkRepeat(){
+  if (verRepeat || horRepeat || sqrRepeat){
     foundRepeat = true
   }
   else{
@@ -54,26 +82,40 @@ function checkVerRepeat(){
   }
 }
 
+function checkSquareRepeat(){
+  let x = Math.floor(selectedGrid[0]/ 3)
+  let y = Math.floor(selectedGrid[1]/ 3)
+
+
+  let squareNumber = new Set()
+  for (let i=0;i<3;i++){
+    for (let j=0;j<3;j++){
+      squareNumber.add(grid[3*y+i][3*x+j])
+    }
+  }
+
+  if (squareNumber.has(keyEntered.toString())){
+    sqrRepeat = true
+  }
+  else{
+    sqrRepeat = false;
+  }
+
+}
+
 // for somereason 0 is printable instead of 9. cancelled out the function for now
 function keyTyped(){
   if (ischosen){
 
-    let y = selectedGrid[1]
-    rowNumbers = new Set(grid[y])
-
-    if (rowNumbers.has(keyEntered.toString())){ // if the number already exist in such row
-      foundRepeat = true  // trigger repeat
-     }
-     else{
-        foundRepeat = false;
-      }
+      checkHorRepeat()
+      checkVerRepeat()
+      checkSquareRepeat()
+      checkRepeat()
 
 //    if (key in numberSet){
     grid[selectedGrid[1]][selectedGrid[0]] = key 
 //    }
     keyEntered = key;
-
-
 
   }
 }
@@ -99,7 +141,6 @@ function createGrid(ROWS,COLS){
   }
   return empty
 }
-
 
 function drawGrid(){
 
@@ -151,6 +192,7 @@ function mouseClicked(){
   }
   else{
     ischosen = true
+    foundRepeat = false;
   }
 
   lastgrid[0] = x
