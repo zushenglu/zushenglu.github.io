@@ -17,6 +17,7 @@ function setup() {
     createCanvas(windowWidth, windowWidth);
     cellSideLength = windowWidth/9;
     canvasSide = windowWidth;
+    textAlign(right);
   }
 
 }
@@ -24,7 +25,19 @@ function setup() {
 function draw() {
   background(220);
   drawGrid()
+  displayNumber()
 }
+
+function displayNumber(){
+  for (let y=0;y<ROWS;y++){
+    for (let x=0;x<COLS;x++){
+      fill("black")
+      textSize(cellSideLength*.9)
+      text(grid[y][x],x*cellSideLength + cellSideLength*.2,y*cellSideLength +cellSideLength*.05,(x+1)*cellSideLength,(y+1)*cellSideLength)
+    }
+  }
+}
+
 
 function createGrid(ROWS,COLS){
   empty = []
@@ -37,6 +50,7 @@ function createGrid(ROWS,COLS){
   return empty
 }
 
+// werid grid problem needs to fix
 function drawGrid(){
   for (let y=0;y<ROWS;y++){
     if (y%3 === 0 && y != 0){
