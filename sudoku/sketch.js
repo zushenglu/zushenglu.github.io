@@ -8,6 +8,14 @@ let grid = createGrid(ROWS,COLS);
 let canvasSide;
 let selectedGrid;
 let lastgrid = [-1,-1];
+let ischosen = false;
+let inputNumber;
+let numberSet = [1,2,3,4,5,6,7,8,9]
+let isKeyInsert = false;
+let keyEntered;
+let rowNumbers;
+let testSet = new Set([1,2,3,4,5])
+let foundRepeat;
 
 function setup() {
   if (windowWidth > windowHeight){
@@ -22,21 +30,52 @@ function setup() {
     textAlign(CENTER);
   }
 
-  selectedGrid = [0,0,0]
+  selectedGrid = [0,0]
 
 }
 
 function draw() {
-  background(220);
+  background('green');
   drawGrid();
   displayNumber();
-
+  checkVerRepeat()
 }
 
-function keyTyped(){
+function checkVerRepeat(){
+  keyEntered = key;
+  let y = selectedGrid[1]
+  rowNumbers = new Set(grid[y])
 
-  grid[selectedGrid[1]][selectedGrid[0]] = key
-  key = 0
+  if (rowNumbers.has(keyEntered.toString())){
+    foundRepeat = true
+  }
+  else{
+    foundRepeat = false;
+  }
+}
+
+// for somereason 0 is printable instead of 9. cancelled out the function for now
+function keyTyped(){
+  if (ischosen){
+
+    let y = selectedGrid[1]
+    rowNumbers = new Set(grid[y])
+
+    if (rowNumbers.has(keyEntered.toString())){ // if the number already exist in such row
+      foundRepeat = true  // trigger repeat
+     }
+     else{
+        foundRepeat = false;
+      }
+
+//    if (key in numberSet){
+    grid[selectedGrid[1]][selectedGrid[0]] = key 
+//    }
+    keyEntered = key;
+
+
+
+  }
 }
 
 function displayNumber(){
@@ -71,16 +110,22 @@ function drawGrid(){
     }
     for (let x=0;x<COLS;x++){
 
-      if (selectedGrid[2] === 1){
+      let a = selectedGrid[0];
+      let b = selectedGrid[1];
+
+      if (ischosen){
+        fill("grey")     
         strokeWeight(0)
-        fill("grey")
-        let a = selectedGrid[0];
-        let b = selectedGrid[1];
+        square(a*cellSideLength,b*cellSideLength,cellSideLength)
+      }
+      
+      if (foundRepeat){
+        fill("red")
+        strokeWeight(0)
         square(a*cellSideLength,b*cellSideLength,cellSideLength)
       }
 
       fill("white")
-      
       strokeWeight(1)
       square(x*cellSideLength,y*cellSideLength,cellSideLength)
 
@@ -90,8 +135,6 @@ function drawGrid(){
       }
     }
   }
-
-
 }
 
 function mouseClicked(){
@@ -104,11 +147,14 @@ function mouseClicked(){
 
   if (x === lastgrid[0] && y === lastgrid[1]){
     selectedGrid[2] = 0;
+    ischosen = !ischosen
   }
   else{
-    selectedGrid[2] = 1;
+    ischosen = true
   }
 
+  lastgrid[0] = x
+  lastgrid[1] = y
 }
 
 
