@@ -4,7 +4,17 @@
 let cellSideLength;
 let ROWS = 9;
 let COLS = 9;
-let grid = createGrid(ROWS,COLS);
+//let grid = createGrid(ROWS,COLS);
+let grid = [[4,1,0,0,6,0,0,7,8],
+            [7,0,3,5,0,1,4,2,0],
+            [0,0,8,4,7,3,0,6,0],
+            [0,5,0,0,9,4,8,3,0],
+            [3,9,0,0,1,0,7,0,0],
+            [2,8,4,3,0,0,0,0,0],
+            [6,0,0,0,0,0,0,8,0],
+            [0,0,1,9,4,0,0,0,0],
+            [0,4,9,0,2,8,0,0,0]]
+
 let canvasSide;
 let selectedGrid;
 let lastgrid = [-1,-1];
@@ -34,7 +44,7 @@ function setup() {
     canvasSide = windowWidth;
     textAlign(CENTER);
   }
-
+  let defaultGrid = grid;
   selectedGrid = [0,0]
 
 }
@@ -106,6 +116,7 @@ function checkSquareRepeat(){
 // for somereason 0 is printable instead of 9. cancelled out the function for now
 function keyTyped(){
   if (ischosen){
+    if (defaultGrid[selectedGrid[1]][selectedGrid[0]] === 0 ){
 
       checkHorRepeat()
       checkVerRepeat()
@@ -113,19 +124,21 @@ function keyTyped(){
       checkRepeat()
 
 //    if (key in numberSet){
-    grid[selectedGrid[1]][selectedGrid[0]] = key 
+      grid[selectedGrid[1]][selectedGrid[0]] = key 
 //    }
     keyEntered = key;
-
+    }
   }
 }
 
 function displayNumber(){
   for (let y=0;y<ROWS;y++){
     for (let x=0;x<COLS;x++){
-      fill("black")
-      textSize(cellSideLength*.9)
-      text(grid[y][x],x*cellSideLength + cellSideLength*.2,y*cellSideLength +cellSideLength*.05,(x+1)*cellSideLength,(y+1)*cellSideLength)
+      if (grid[y][x] !== 0){
+        fill("black")
+        textSize(cellSideLength*.9)
+        text(grid[y][x],x*cellSideLength + cellSideLength*.2,y*cellSideLength +cellSideLength*.05,(x+1)*cellSideLength,(y+1)*cellSideLength)
+      }
     }
   }
 }
@@ -198,5 +211,3 @@ function mouseClicked(){
   lastgrid[0] = x
   lastgrid[1] = y
 }
-
-
