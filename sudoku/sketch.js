@@ -14,7 +14,8 @@ let grid = [[4,1,0,0,6,0,0,7,8],
             [6,0,0,0,0,0,0,8,0],
             [0,0,1,9,4,0,0,0,0],
             [0,4,9,0,2,8,0,0,0]]
-
+          
+let defaultGrid;
 let canvasSide;
 let selectedGrid;
 let lastgrid = [-1,-1];
@@ -44,46 +45,23 @@ function setup() {
     canvasSide = windowWidth;
     textAlign(CENTER);
   }
-  let defaultGrid = grid;
   selectedGrid = [0,0]
-
+  defaultGrid = grid;
 }
 
 function draw() {
   background('green');
   drawGrid();
   displayNumber();
+ 
  // checkVerRepeat()
 }
 
-function checkHorRepeat(){
-  keyEntered = key;
-  let y = selectedGrid[1]
-  rowNumbers = new Set(grid[y])
-
-  if (rowNumbers.has(keyEntered.toString())){
-    horRepeat = true
-  }
-  else{
-    horRepeat = false;
-  }
-}
-
-function checkVerRepeat(){
-  let x = selectedGrid[0]
-  colNumbers = new Set()
-  for(let y=0;y<9;y++){
-    colNumbers.add(grid[y][x])
-  }
-  if (colNumbers.has(keyEntered.toString())){
-    verRepeat = true
-  }
-  else{
-    verRepeat = false;
-  }
-}
-
 function checkRepeat(){
+  checkHorRepeat()
+  checkVerRepeat()
+  checkSquareRepeat()
+
   if (verRepeat || horRepeat || sqrRepeat){
     foundRepeat = true
   }
@@ -92,41 +70,16 @@ function checkRepeat(){
   }
 }
 
-function checkSquareRepeat(){
-  let x = Math.floor(selectedGrid[0]/ 3)
-  let y = Math.floor(selectedGrid[1]/ 3)
-
-
-  let squareNumber = new Set()
-  for (let i=0;i<3;i++){
-    for (let j=0;j<3;j++){
-      squareNumber.add(grid[3*y+i][3*x+j])
-    }
-  }
-
-  if (squareNumber.has(keyEntered.toString())){
-    sqrRepeat = true
-  }
-  else{
-    sqrRepeat = false;
-  }
-
-}
-
 // for somereason 0 is printable instead of 9. cancelled out the function for now
 function keyTyped(){
   if (ischosen){
     if (defaultGrid[selectedGrid[1]][selectedGrid[0]] === 0 ){
 
-      checkHorRepeat()
-      checkVerRepeat()
-      checkSquareRepeat()
       checkRepeat()
-
+      keyEntered
 //    if (key in numberSet){
-      grid[selectedGrid[1]][selectedGrid[0]] = key 
+      grid[selectedGrid[1]][selectedGrid[0]] = Number(key);
 //    }
-    keyEntered = key;
     }
   }
 }
@@ -210,4 +163,52 @@ function mouseClicked(){
 
   lastgrid[0] = x
   lastgrid[1] = y
+}
+
+function checkHorRepeat(){
+  keyEntered = key;
+  let y = selectedGrid[1]
+  rowNumbers = new Set(grid[y])
+
+  if (rowNumbers.has(keyEntered.toString())){
+    horRepeat = true
+  }
+  else{
+    horRepeat = false;
+  }
+}
+
+function checkVerRepeat(){
+  let x = selectedGrid[0]
+  colNumbers = new Set()
+  for(let y=0;y<9;y++){
+    colNumbers.add(grid[y][x])
+  }
+  if (colNumbers.has(keyEntered.toString())){
+    verRepeat = true
+  }
+  else{
+    verRepeat = false;
+  }
+}
+
+function checkSquareRepeat(){
+  let x = Math.floor(selectedGrid[0]/ 3)
+  let y = Math.floor(selectedGrid[1]/ 3)
+
+
+  let squareNumber = new Set()
+  for (let i=0;i<3;i++){
+    for (let j=0;j<3;j++){
+      squareNumber.add(grid[3*y+i][3*x+j])
+    }
+  }
+
+  if (squareNumber.has(keyEntered.toString())){
+    sqrRepeat = true
+  }
+  else{
+    sqrRepeat = false;
+  }
+
 }
