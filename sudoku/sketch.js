@@ -210,5 +210,4 @@ function checkSquareRepeat(){
   else{
     sqrRepeat = false;
   }
-
 }
