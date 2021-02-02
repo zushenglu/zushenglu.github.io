@@ -30,7 +30,8 @@ let verRepeat = false;
 let horRepeat = false;
 let squareNumber;
 let sqrRepeat = false;
-
+let startCheck = false;;
+let selectedNumber;
 
 function setup() {
   if (windowWidth > windowHeight){
@@ -52,7 +53,7 @@ function draw() {
   background('green');
   drawGrid();
   displayNumber();
-  checkVerRepeat()
+  checkRepeat();
 }
 
 function createGrid(ROWS,COLS){
@@ -87,6 +88,7 @@ function drawGrid(){
         strokeWeight(0)
         square(a*cellSideLength,b*cellSideLength,cellSideLength)
       }
+
       fill("white")
       strokeWeight(1)
       square(x*cellSideLength,y*cellSideLength,cellSideLength)
@@ -111,37 +113,23 @@ function displayNumber(){
 }
 
 function keyTyped(){
+  startCheck = false;
+  keyEntered = key;
   if (ischosen){
-
-    let y = selectedGrid[1]
-    rowNumbers = new Set(grid[y])
-
-    if (rowNumbers.has(keyEntered.toString())){ // if the number already exist in such row
-      foundRepeat = true  // trigger repeat
-     }
-     else{
-        foundRepeat = false;
-      }
-      checkHorRepeat()
-      checkVerRepeat()
-      checkSquareRepeat()
-      checkRepeat()
-
-//    if (key in numberSet){
-    grid[selectedGrid[1]][selectedGrid[0]] = key 
-//    }
-    keyEntered = key;
+    grid[selectedGrid[1]][selectedGrid[0]] = keyEntered
+    startCheck = true;
   }
 }
 
 function mouseClicked(){
+
   let x = Math.floor(mouseX/cellSideLength)
   let y = Math.floor(mouseY/cellSideLength)
   
   selectedGrid[0] = x;
   selectedGrid[1] = y;
+
   if (x === lastgrid[0] && y === lastgrid[1]){
-    selectedGrid[2] = 0;
     ischosen = !ischosen
   }
   else{
@@ -149,12 +137,21 @@ function mouseClicked(){
     foundRepeat = false;
   }
 
+  if (ischosen = true){
+    startCheck = true;
+  }
+  else {
+    startCheck = false;
+  }
+
   lastgrid[0] = x
   lastgrid[1] = y
+
+  startCheck = true;
 }
 
 function checkHorRepeat(){
-  keyEntered = key;
+
   let y = selectedGrid[1]
   rowNumbers = new Set(grid[y])
 
@@ -168,7 +165,7 @@ function checkHorRepeat(){
 
 function checkVerRepeat(){
   let x = selectedGrid[0]
-  keyEntered = key;
+
   colNumbers = new Set()
   for(let y=0;y<9;y++){
     colNumbers.add(grid[y][x])
@@ -185,9 +182,8 @@ function checkSquareRepeat(){
   let x = Math.floor(selectedGrid[0]/ 3)
   let y = Math.floor(selectedGrid[1]/ 3)
 
-
   let squareNumber = new Set()
-  keyEntered = key;
+
   for (let i=0;i<3;i++){
     for (let j=0;j<3;j++){
       squareNumber.add(grid[3*y+i][3*x+j])
@@ -204,10 +200,19 @@ function checkSquareRepeat(){
 }
 
 function checkRepeat(){
-  if (verRepeat || horRepeat || sqrRepeat){
-    foundRepeat = true
-  }
-  else{
-    foundRepeat = false;
+  if (startCheck){
+    selectedNumber = grid[selectedGrid[1][selectedGrid[0]]]
+ 
+    checkHorRepeat()
+    checkVerRepeat()
+    checkSquareRepeat()
+    
+    if (verRepeat || horRepeat || sqrRepeat){
+      foundRepeat = true
+    }
+    else{
+      foundRepeat = false;
+    }
+    startCheck = false;
   }
 }
