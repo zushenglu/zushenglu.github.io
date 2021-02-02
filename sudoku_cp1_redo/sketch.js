@@ -106,7 +106,7 @@ function displayNumber(){
         let hghg = "sss";
       }
       else if (grid[y][x] in numberSet){
-        text(grid[y][x],x*cellSideLength + cellSideLength*.2,y*cellSideLength +cellSideLength*.05,(x+1)*cellSideLength,(y+1)*cellSideLength);
+        text(grid[y][x],x*cellSideLength,y*cellSideLength +cellSideLength*.05,(x+1)*cellSideLength,(y+1)*cellSideLength);
       }
       else {
         let ksksks = "ssss";
