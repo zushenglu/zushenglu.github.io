@@ -13,6 +13,16 @@ let grid = [[4,1,0,0,6,0,0,7,8],
   [0,0,1,9,4,0,0,0,0],
   [0,4,9,0,2,8,0,0,0]];
 
+let defaultGrid = [[4,1,0,0,6,0,0,7,8],
+  [7,0,3,5,0,1,4,2,0],
+  [0,0,8,4,7,3,0,6,0],
+  [0,5,0,0,9,4,8,3,0],
+  [3,9,0,0,1,0,7,0,0],
+  [2,8,4,3,0,0,0,0,0],
+  [6,0,0,0,0,0,0,8,0],
+  [0,0,1,9,4,0,0,0,0],
+  [0,4,9,0,2,8,0,0,0]];
+
 //createGrid(ROWS,COLS);
 let canvasSide;
 let selectedGrid;
@@ -23,7 +33,6 @@ let numberSet = [1,2,3,4,5,6,7,8,9];
 let isKeyInsert = false;
 let keyEntered;
 let rowNumbers;
-let testSet = new Set([1,2,3,4,5]);
 let foundRepeat;
 let colNumbers;
 let verRepeat = false;
@@ -53,6 +62,7 @@ function draw() {
   background("green");
   drawGrid();
   displayNumber();
+
 }
 
 function createGrid(ROWS,COLS){
@@ -77,7 +87,6 @@ function drawGrid(){
       let a = selectedGrid[0];
       let b = selectedGrid[1];
       if (ischosen){
-
         fill("grey");
         strokeWeight(0);
         square(a*cellSideLength,b*cellSideLength,cellSideLength);
@@ -114,14 +123,25 @@ function displayNumber(){
 
 function keyTyped(){
 
-  startCheck = false;
-  keyEntered = key;
-  if (ischosen){
-    grid[selectedGrid[1]][selectedGrid[0]] = keyEntered;
-    console.log(grid[selectedGrid[1]][selectedGrid[0]]);
-    selectedNumber = keyEntered;
-    startCheck = true;
-    checkRepeat();
+  for (let i=0; i<9;i++){
+    if (key === i.toString()){
+      startCheck = false;
+      keyEntered = key;
+      if (ischosen){
+        if (defaultGrid[selectedGrid[1]][selectedGrid[0]] === 0 ){
+          
+          grid[selectedGrid[1]][selectedGrid[0]] = keyEntered;
+          console.log(grid[selectedGrid[1]][selectedGrid[0]]);
+          selectedNumber = keyEntered;
+          startCheck = true;
+          checkRepeat();
+        }
+      }
+    }
+    else if (key === " "){
+      keyEntered = key;
+      grid[selectedGrid[1]][selectedGrid[0]] = keyEntered;
+    }
   }
 }
 
@@ -152,16 +172,14 @@ function mouseClicked(){
   lastgrid[1] = y;
 
   checkRepeat();
-
 }
 
 function checkHorRepeat(){
-
   let y = selectedGrid[1];
   horRepeat = false;
   for(let x=0;x<9;x++){
-    if (grid[y][x] !== 0 && selectedGrid[0] !== x && grid[y][x] === selectedNumber){
-      horRepeat = true;    
+    if (grid[y][x] != 0 && (selectedGrid[0] != x) && grid[y][x] == (selectedNumber)){
+      horRepeat = true;
     }
   }
 }
@@ -170,7 +188,7 @@ function checkVerRepeat(){
   let x = selectedGrid[0];
   verRepeat = false;
   for(let y=0;y<9;y++){
-    if (grid[y][x] !== 0 && selectedGrid[1] !== y && grid[y][x] === selectedNumber){
+    if (grid[y][x] != 0 && (selectedGrid[1] != y) && grid[y][x] == (selectedNumber)){
       verRepeat = true;
     }
   }
@@ -183,9 +201,7 @@ function checkSquareRepeat(){
   sqrRepeat = false;
   for (let i=0;i<3;i++){
     for (let j=0;j<3;j++){
-      console.log(grid[3*y+i][3*x+j] !== 0 , (selectedGrid[0] !== 3*x+j, selectedGrid[1] !== 3*y+i), grid[3*y+i][3*x+j], selectedNumber);
-      if (grid[3*y+i][3*x+j] !== 0 && (selectedGrid[0] !== 3*x+j || selectedGrid[1] !== 3*y+i) && grid[3*y+i][3*x+j] === selectedNumber){
-        console.log(grid[3*y+i][3*x+j] !== 0 , (selectedGrid[0] !== 3*x+j, selectedGrid[1] !== 3*y+i), grid[3*y+i][3*x+j], selectedNumber);
+      if (grid[3*y+i][3*x+j] != 0 && (selectedGrid[0] != 3*x+j || selectedGrid[1] != 3*y+i) && grid[3*y+i][3*x+j] == (selectedNumber)){
         sqrRepeat = true;
       }
     }
