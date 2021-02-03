@@ -139,7 +139,7 @@ function displayNumber(){
     for (let x=0;x<COLS;x++){
       fill("black")
       textSize(cellSideLength*.9)
-      text(grid[y][x],x*cellSideLength + cellSideLength*.2,y*cellSideLength +cellSideLength*.05,(x+1)*cellSideLength,(y+1)*cellSideLength)
+      text(grid[y][x],x*cellSideLength+cellSideLength/2,y*cellSideLength + cellSideLength*7/8)
     }
   }
 }
