@@ -19,18 +19,18 @@ let selectedGrid;
 let lastgrid = [-1,-1];
 let ischosen = false;
 let inputNumber;
-let numberSet = [1,2,3,4,5,6,7,8,9]
+let numberSet = [1,2,3,4,5,6,7,8,9];
 let isKeyInsert = false;
 let keyEntered;
 let rowNumbers;
-let testSet = new Set([1,2,3,4,5])
+let testSet = new Set([1,2,3,4,5]);
 let foundRepeat;
 let colNumbers;
 let verRepeat = false;
 let horRepeat = false;
 let squareNumber;
 let sqrRepeat = false;
-let startCheck = false;;
+let startCheck = false;
 let selectedNumber;
 
 function setup() {
@@ -44,7 +44,7 @@ function setup() {
     cellSideLength = windowWidth/9;
     canvasSide = windowWidth;
   }
-  selectedGrid = [0,0]
+  selectedGrid = [0,0];
     textAlign(CENTER);
 //  rectMode(CENTER)
 }
@@ -57,14 +57,14 @@ function draw() {
 }
 
 function createGrid(ROWS,COLS){
-  empty = []
+  empty = [];
   for (let y=0;y<ROWS;y++){
-    empty.push([])
+    empty.push([]);
     for (let x=0;x<COLS;x++){
-      empty[y].push()
+      empty[y].push();
     }
   }
-  return empty
+  return empty;
 }
 
 function drawGrid(){
@@ -77,21 +77,21 @@ function drawGrid(){
     for (let x=0;x<COLS;x++){
       let a = selectedGrid[0];
       let b = selectedGrid[1];
-      if (ischosen){
-        fill("grey")     
-        strokeWeight(0)
-        square(a*cellSideLength,b*cellSideLength,cellSideLength)
+      if (ischosen || grid[y][x]){
+        fill("grey");
+        strokeWeight(0);
+        square(a*cellSideLength,b*cellSideLength,cellSideLength);
       }
       
       if (foundRepeat){
-        fill("red")
-        strokeWeight(0)
-        square(a*cellSideLength,b*cellSideLength,cellSideLength)
+        fill("red");
+        strokeWeight(0);
+        square(a*cellSideLength,b*cellSideLength,cellSideLength);
       }
 
-      fill("white")
-      strokeWeight(1)
-      square(x*cellSideLength,y*cellSideLength,cellSideLength)
+      fill("white");
+      strokeWeight(1);
+      square(x*cellSideLength,y*cellSideLength,cellSideLength);
       if (x%3 === 0 && x!=0){
         strokeWeight(10);
         line(x*cellSideLength,0, x*cellSideLength, canvasSide);
@@ -104,8 +104,8 @@ function displayNumber(){
   for (let y=0;y<ROWS;y++){
     for (let x=0;x<COLS;x++){
       if (grid[y][x] !== 0){
-      fill("black")
-      textSize(cellSideLength*.9)
+      fill("black");
+      textSize(cellSideLength*.9);
       text(grid[y][x],x*cellSideLength+cellSideLength/2,y*cellSideLength + cellSideLength*7/8)
      }
    }
@@ -117,9 +117,9 @@ function keyTyped(){
   startCheck = false;
   keyEntered = key;
   if (ischosen){
-    grid[selectedGrid[1]][selectedGrid[0]] = keyEntered
-    console.log(grid[selectedGrid[1]][selectedGrid[0]])
-    selectedNumber = keyEntered
+    grid[selectedGrid[1]][selectedGrid[0]] = keyEntered;
+    console.log(grid[selectedGrid[1]][selectedGrid[0]]);
+    selectedNumber = keyEntered;
     startCheck = true;
     checkRepeat();
   }
@@ -127,62 +127,62 @@ function keyTyped(){
 
 function mouseClicked(){
 
-  let x = Math.floor(mouseX/cellSideLength)
-  let y = Math.floor(mouseY/cellSideLength)
+  let x = Math.floor(mouseX/cellSideLength);
+  let y = Math.floor(mouseY/cellSideLength);
   
   selectedGrid[0] = x;
   selectedGrid[1] = y;
-  selectedNumber = grid[y][x]
+  selectedNumber = grid[y][x];
   if (x === lastgrid[0] && y === lastgrid[1]){
-    ischosen = !ischosen
+    ischosen = !ischosen;
   }
   else{
-    ischosen = true
+    ischosen = true;
     foundRepeat = false;
   }
 
   if (ischosen === true){
-    startCheck = true
+    startCheck = true;
   }
   else {
     startCheck = false;
   }
 
-  lastgrid[0] = x
-  lastgrid[1] = y
+  lastgrid[0] = x;
+  lastgrid[1] = y;
 
-  checkRepeat()
+  checkRepeat();
 }
 
 function checkHorRepeat(){
-  let y = selectedGrid[1]
-  horRepeat = false
+  let y = selectedGrid[1];
+  horRepeat = false;
   for(let x=0;x<9;x++){
     if (grid[y][x] != 0 && (selectedGrid[0] != x) && grid[y][x] == (selectedNumber)){
-      horRepeat = true
+      horRepeat = true;
     }
   }
 }
 
 function checkVerRepeat(){
-  let x = selectedGrid[0]
-  verRepeat = false
+  let x = selectedGrid[0];
+  verRepeat = false;
   for(let y=0;y<9;y++){
     if (grid[y][x] != 0 && (selectedGrid[1] != y) && grid[y][x] == (selectedNumber)){
-      verRepeat = true
+      verRepeat = true;
     }
   }
 }
 
 function checkSquareRepeat(){
-  let x = Math.floor(selectedGrid[0]/ 3)
-  let y = Math.floor(selectedGrid[1]/ 3)
+  let x = Math.floor(selectedGrid[0]/ 3);
+  let y = Math.floor(selectedGrid[1]/ 3);
 
   sqrRepeat = false;
   for (let i=0;i<3;i++){
     for (let j=0;j<3;j++){
       if (grid[3*y+i][3*x+j] != 0 && (selectedGrid[0] != 3*x+j || selectedGrid[1] != 3*y+i) && grid[3*y+i][3*x+j] == (selectedNumber)){
-        sqrRepeat = true
+        sqrRepeat = true;
       }
     }
   }
@@ -191,13 +191,13 @@ function checkSquareRepeat(){
 function checkRepeat(){
   if (startCheck){
  
-    checkHorRepeat()
-    checkVerRepeat()
-    checkSquareRepeat()
+    checkHorRepeat();
+    checkVerRepeat();
+    checkSquareRepeat();
     
     if (verRepeat || horRepeat || sqrRepeat){
-      console.log({verRepeat, horRepeat, sqrRepeat})
-      foundRepeat = true
+      console.log({verRepeat, horRepeat, sqrRepeat});
+      foundRepeat = true;
     }
     else{
       foundRepeat = false;
