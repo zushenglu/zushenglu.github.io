@@ -77,12 +77,13 @@ function draw() {
   checkFinish();
 }
 
-function backtrack(startNum,endNum,gridY,gridX){
+function backtrack(startNum,endNum){
 
   // check for valid space
 
   for (let y =startNum;y<endNum;y++){
     for (let x=startNum;x<endNum;x++){
+      
       if (defaultGrid[y][x] === 0){
         gridToFill = true;
       }
