@@ -30,7 +30,7 @@ let answerGrid = [[4, 1, "5", "2", 6, "9", "3", 7, 8],
   [2, 8, 4, 3, "5", "7", "1", "9", "6"],
   [6, "7", "2", "1", "3", "5", "9", 8, "4"],
   ["8", "3", 1, 9, 4, "6", "2", "5", "7"],
-  ["5", 4, 9, "7", 2, 8, "6", "1", "3"]]
+  ["5", 4, 9, "7", 2, 8, "6", "1", "3"]];
 
 let canvasSide, cellSideLength;
 
@@ -83,17 +83,17 @@ function checkFinish(){
     for (let x=0; x<9; x++){
 
       if (grid[y][x] != answerGrid[y][x]){
-          finish = false;
+        finish = false;
       }
     }
   }
 
   // shows end game screen
   if (finish === true){
-    fill("#fbe6ff")
-    rect(0,0,width,height)
-    fill('#47d1d1')
-    text("GG", width/2, height/2)
+    fill("#fbe6ff");
+    rect(0,0,width,height);
+    fill('#47d1d1');
+    text("GG", width/2, height/2);
   }
 }
 
@@ -126,8 +126,8 @@ function drawGrid(){
 
       // darken the grid with same number to help user solve the puzzle
       if (grid[y][x] != 0 && grid[y][x] == selectedNumber){
-        fill("brown")
-        square(x*cellSideLength,y*cellSideLength,cellSideLength)
+        fill("brown");
+        square(x*cellSideLength,y*cellSideLength,cellSideLength);
       }
       
       // highlight the grid when select a number that violates the sudoku rule
@@ -264,9 +264,10 @@ function keyTyped(){
 
 
   for (let i=1; i<10;i++){
+    keyEntered = key;
     // runs only when a number between 1-9 is typed
     if (key == i){
-      keyEntered = key;
+
 
       // check for repeat when a key between 1-9 is typed and a grid
       // is selected
@@ -279,11 +280,12 @@ function keyTyped(){
         }
       }
     }
-
     // if the key pressed is space, it clears the value in the grid
-    else if (key === " " && defaultGrid[selectedGrid[1][selectedGrid[0]] != 0]){
-      keyEntered = key;
-      grid[selectedGrid[1]][selectedGrid[0]] = keyEntered;
-    }
   }
+
+
+  if (keyEntered === " " && defaultGrid[selectedGrid[1]][selectedGrid[0]] === 0){
+    grid[selectedGrid[1]][selectedGrid[0]] = keyEntered;
+  }  
+
 }
