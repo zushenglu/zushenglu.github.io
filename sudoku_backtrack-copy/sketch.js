@@ -77,32 +77,7 @@ function draw() {
   checkFinish();
 }
 
-function backtrack(startNum,endNum){
 
-  // check for valid space
-
-  for (let y =startNum;y<endNum;y++){
-    for (let x=startNum;x<endNum;x++){
-      
-      if (defaultGrid[y][x] === 0){
-        gridToFill = true;
-      }
-      else{
-        gridToFill = false;
-      }
-
-      if (gridToFill){
-        for (let num=0;num<9;num++){
-          grid[y][x] = num+1;
-          if (!foundRepeat) {
-            backtrack(num+1, 9,x,y);
-          }
-
-        }
-      }
-    }
-  }
-}
 
 function checkFinish(){
 
@@ -191,6 +166,44 @@ function displayNumber(){
   }
 }
 
+function startMachine(){
+  selectedgrid = [0,0];
+  selectedNumber = grid[0][0];
+  let x = 0;
+  let y = 0
+
+  backtrack(x,y);
+}
+
+function backtrack(x,y){
+
+  // check for valid space
+  if (y == 8 && x > 8){
+    return(grid);
+  }
+
+  else if (y)
+
+    if (defaultGrid[y][x] === 0){
+      gridToFill = true;
+    }
+    else{
+      gridToFill = false;
+    }
+
+    if (gridToFill){
+      for (let num=0;num<9;num++){
+        grid[y][x] = num+1;
+        if (!foundRepeat) {
+          backtrack(num+1, 9,x,y);
+        }
+
+        }
+      }
+    }
+  }
+}
+
 function mouseClicked(){
 
   // locate the grid that is clicked
@@ -227,12 +240,12 @@ function mouseClicked(){
   checkRepeat();
 }
 
-function checkRepeat(){
+function checkRepeat(x,y){
 
   // check for repeat when a grid is chosen or when a value is altered
   if (startCheck){
  
-    checkHorRepeat();
+    checkHorRepeat(y);
     checkVerRepeat();
     checkSquareRepeat();
     
@@ -248,10 +261,10 @@ function checkRepeat(){
   }
 }
 
-function checkHorRepeat(){
+function checkHorRepeat(y){
 
   // check if the number in selected grid repeats in the same row
-  let y = selectedGrid[1];
+
   horRepeat = false;
   for(let x=0;x<9;x++){
     if (grid[y][x] != 0 && (selectedGrid[0] != x) && grid[y][x] == (selectedNumber)){
@@ -317,6 +330,7 @@ function keyTyped(){
     grid[selectedGrid[1]][selectedGrid[0]] = keyEntered;
   }  
 
+  // if s is pressed, trigger the thing
   if (key === "s"){
     backtrack(0,9,0,0);
   }
