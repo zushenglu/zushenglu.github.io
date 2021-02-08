@@ -2,7 +2,7 @@
 
 
 
-let grid = [[4,1,0,0,6,0,0,7,8],
+let grid1 = [[4,1,0,0,6,0,0,7,8],
   [7,0,3,5,0,1,4,2,0],
   [0,0,8,4,7,3,0,6,0],
   [0,5,0,0,9,4,8,3,0],
@@ -48,10 +48,11 @@ let sqrRepeat = false;
 let finish = false;
 
 let gridToFill = false;
+let end;
 
 function setup() {
 
-  // makes the grid the biggest square of the screen
+  // makes the grid1 the biggest square of the screen
   if (windowWidth > windowHeight){
     createCanvas(windowHeight, windowHeight);
     cellSideLength = windowHeight/9;
@@ -70,7 +71,7 @@ function setup() {
 
 function draw() {
 
-  // draw grid, show number within the array, and check if the game
+  // draw grid1, show number within the array, and check if the game
   // game is completed
   drawGrid();
   displayNumber();
@@ -81,12 +82,12 @@ function draw() {
 
 function checkFinish(){
 
-  // check if the the grid value is equal to the answer
+  // check if the the grid1 value is equal to the answer
   finish = true;
   for (let y=0;y<9;y++){
     for (let x=0; x<9; x++){
 
-      if (grid[y][x] != answerGrid[y][x]){
+      if (grid1[y][x] != answerGrid[y][x]){
         finish = false;
       }
     }
@@ -112,35 +113,11 @@ function drawGrid(){
     }
     for (let x=0;x<9;x++){
 
-      // draw base grid
+      // draw base grid1
       fill("white");
       strokeWeight(1);
       square(x*cellSideLength,y*cellSideLength,cellSideLength);
-
-      // use a and b to make code more readable
-      let a = selectedGrid[0];
-      let b = selectedGrid[1];
-
-      // darken the selected grid
-      if (ischosen){
-        fill("grey");
-        strokeWeight(0);
-        square(a*cellSideLength,b*cellSideLength,cellSideLength);
-      }
-
-      // darken the grid with same number to help user solve the puzzle
-      if (grid[y][x] != 0 && grid[y][x] == selectedNumber){
-        fill("brown");
-        square(x*cellSideLength,y*cellSideLength,cellSideLength);
-      }
-      
-      // highlight the grid when select a number that violates the sudoku rule
-      if (foundRepeat){
-        fill("red");
-        strokeWeight(0);
-        square(a*cellSideLength,b*cellSideLength,cellSideLength);
-      }
-      
+ 
       // draw verical split line
       if (x%3 === 0 && x!==0){
         strokeWeight(10);
@@ -150,188 +127,125 @@ function drawGrid(){
   }
 }
 
-function displayNumber(){
-  
+function displayNumber(){ 
 
   for (let y=0;y<9;y++){
     for (let x=0;x<9;x++){
 
-      // puts numbers in grid onto the screen, 0 excluded
-      if (grid[y][x] !== 0){
+      // puts numbers in grid1 onto the screen, 0 excluded
+      if (grid1[y][x] !== 0){
         fill("black");
         textSize(cellSideLength*0.9);
-        text(grid[y][x],x*cellSideLength+cellSideLength/2,y*cellSideLength + cellSideLength*7/8);
+        text(grid1[y][x],x*cellSideLength+cellSideLength/2,y*cellSideLength + cellSideLength*7/8);
       }
     }
   }
 }
 
 function startMachine(){
-  selectedgrid = [0,0];
-  selectedNumber = grid[0][0];
-  let x = 0;
-  let y = 0
-
-  backtrack(x,y);
+  end = false
+  backtrack(0,0,grid1);
 }
 
-function backtrack(x,y){
-
-  // check for valid space
-  if (y == 8 && x > 8){
-    return(grid);
-  }
-
-  else if (y)
-
-    if (defaultGrid[y][x] === 0){
-      gridToFill = true;
-    }
-    else{
-      gridToFill = false;
-    }
-
-    if (gridToFill){
-      for (let num=0;num<9;num++){
-        grid[y][x] = num+1;
-        if (!foundRepeat) {
-          backtrack(num+1, 9,x,y);
-        }
-
-        }
-      }
-    }
-  }
-}
-
-function mouseClicked(){
-
-  // locate the grid that is clicked
-  let x = Math.floor(mouseX/cellSideLength);
-  let y = Math.floor(mouseY/cellSideLength);
-  
-  // set grid location  and value as global value for repeat detection 
-  // and draw grid
-  selectedGrid[0] = x;
-  selectedGrid[1] = y;
-
-  selectedNumber = grid[y][x];
-
-  // choose/ unchoose/ choose new grid
-  if (x === lastgrid[0] && y === lastgrid[1]){
-    ischosen = !ischosen;
-  }
-  else{
-    ischosen = true;
-    foundRepeat = false;
-  }
-
-  lastgrid[0] = x;
-  lastgrid[1] = y;
-
-  // control when to check for repeat
-  if (ischosen === true){
-    startCheck = true;
-  }
-  else {
-    startCheck = false;
-  }
-
-  checkRepeat();
-}
-
-function checkRepeat(x,y){
-
-  // check for repeat when a grid is chosen or when a value is altered
-  if (startCheck){
- 
-    checkHorRepeat(y);
-    checkVerRepeat();
-    checkSquareRepeat();
+function backtrack(row,colume,map){
     
-    // if the number repeats in any of the test above, tell draw to
-    // highlight the grid
-    if (verRepeat || horRepeat || sqrRepeat){
-      foundRepeat = true;
-    }
-    else{
-      foundRepeat = false;
-    }
-    startCheck = false;
-  }
-}
-
-function checkHorRepeat(y){
-
-  // check if the number in selected grid repeats in the same row
-
-  horRepeat = false;
-  for(let x=0;x<9;x++){
-    if (grid[y][x] != 0 && (selectedGrid[0] != x) && grid[y][x] == (selectedNumber)){
-      horRepeat = true;
-    }
-  }
-}
-
-function checkVerRepeat(){
-
-  // check if the number in selected grid repeats in the same colomn
-  let x = selectedGrid[0];
-  verRepeat = false;
-  for(let y=0;y<9;y++){
-    if (grid[y][x] != 0 && (selectedGrid[1] != y) && grid[y][x] == (selectedNumber)){
-      verRepeat = true;
-    }
-  }
-}
-
-function checkSquareRepeat(){
-
-  // determine regional square the selected grid is in
-  let x = Math.floor(selectedGrid[0]/ 3);
-  let y = Math.floor(selectedGrid[1]/ 3);
-
-  // check if the number repeats in the same 3x3 square
-  sqrRepeat = false;
-  for (let i=0;i<3;i++){
-    for (let j=0;j<3;j++){
-      if (grid[3*y+i][3*x+j] != 0 && (selectedGrid[0] != 3*x+j || selectedGrid[1] != 3*y+i) && grid[3*y+i][3*x+j] == (selectedNumber)){
-        sqrRepeat = true;
+  // if number here, skip
+  if (0 != map[row][colume]){
+      
+      // if at the right bot corner, return map
+      if (colume == map.length - 1 && row == map.length -1){
+         end = true
+         return grid_9x9
       }
+      // if at the end of row, go to next row
+      else if (colume == map.length -1){
+          colume = 0
+          backtrack(row + 1, 0,map)
+      }
+      // if not at the end of row, go to next colume
+      else{
+          backtrack(row,colume+1,map)
+      }
+    }
+  // if this place is zero, input a number
+  else if (map[row][colume] == 0){
+      
+//       this place inserts the number
+      for (let num = 1; num < 10; num ++){
+          
+          if (end == true){
+              return grid_9x9
+          }
+          else{
+        
+              map[row][colume] = num
+              console.log(map)
+              // if no repeat: go to next map
+              if (findRepeat(num,map,row,colume) == false){
+                  
+                  // if not at last map of row, go to next
+                  if (colume < map[row].length-1){
+                      backtrack(row,colume+1,map)
+                  }
+                  
+                  // if at right bot corner, return map
+                  else if (colume == map[row].length-1){
+                      if (row == map.length-1){
+                          end = true
+                          return map
+                      }
+                  
+                  // if at last map of row, go to next row
+                      backtrack(row+1,0,map)
+                    }
+                      
+              // testing code to fix the problem
+              if (!end){
+                  map[row][colume] = 0
+              }
+            }
+          }
+        }
+      }
+}
+
+function findRepeat(num,map,row,colume){
+  for (let colindex = 0; colindex<9;colindex++){
+    if (colindex != colume){
+        if (num == map[row][colindex]){
+            map[row][colume] = 0
+            return true
+        }
+    }
+  }
+  for (let rowindex=0; rowindex < 9; rowindex++){
+    if  (rowindex != row){
+        if (num == map[rowindex][colume]){
+            map[row][colume] = 0
+            return true
+        }
+    }
+  }  
+
+  x = Math.floor(colume/3)
+  y = Math.floor(row/3)
+
+  for (let rowindex=0;rowindex<9;rowindex++){
+    for (let colindex=0;colindex<9;colindex++){
+        if (colindex + 3*x != colume && rowindex + 3*y != row){
+            if (map[rowindex + 3*y][colindex  + 3*x] == num){
+                map[row][colume] = 0
+                return true
+            }
+        }
     }
   }
 }
 
 function keyTyped(){
 
-
-  for (let i=1; i<10;i++){
-    keyEntered = key;
-    // runs only when a number between 1-9 is typed
-    if (key == i){
-
-
-      // check for repeat when a key between 1-9 is typed and a grid
-      // is selected
-      if (ischosen){
-        if (defaultGrid[selectedGrid[1]][selectedGrid[0]] === 0 ){
-          grid[selectedGrid[1]][selectedGrid[0]] = keyEntered;
-          selectedNumber = keyEntered;
-          startCheck = true;
-          checkRepeat();
-        }
-      }
-    }
-    // if the key pressed is space, it clears the value in the grid
-  }
-
-
-  if (keyEntered === " " && defaultGrid[selectedGrid[1]][selectedGrid[0]] === 0){
-    grid[selectedGrid[1]][selectedGrid[0]] = keyEntered;
-  }  
-
   // if s is pressed, trigger the thing
   if (key === "s"){
-    backtrack(0,9,0,0);
+    startMachine();
   }
 }
