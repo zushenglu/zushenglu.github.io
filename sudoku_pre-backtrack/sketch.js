@@ -1,6 +1,4 @@
-// Project Title
-
-
+// sudoku 
 
 let grid = [[4,1,0,0,6,0,0,7,8],
   [7,0,3,5,0,1,4,2,0],
@@ -101,7 +99,7 @@ function drawGrid(){
 
   for (let y=0;y<9;y++){
     
-    // draw horizontal split line
+    // draw horizontal line to split the grid
     if (y%3 === 0 && y !== 0){
       strokeWeight(10);
       line(0,y*cellSideLength,canvasSide,y*cellSideLength);
@@ -113,20 +111,20 @@ function drawGrid(){
       strokeWeight(1);
       square(x*cellSideLength,y*cellSideLength,cellSideLength);
 
-      // use a and b to make code more readable
-      let a = selectedGrid[0];
-      let b = selectedGrid[1];
+      // create new variuble to make code more readable
+      let xSelected = selectedGrid[0]; // the x value of selected grid
+      let ySelected = selectedGrid[1]; // the y value of selected grid
 
-      // darken the selected grid
+      // hightlight the selected grid
       if (ischosen){
-        fill("grey");
+        fill(144,137,137);
         strokeWeight(0);
-        square(a*cellSideLength,b*cellSideLength,cellSideLength);
+        square(xSelected*cellSideLength,ySelected*cellSideLength,cellSideLength);
       }
 
-      // darken the grid with same number to help user solve the puzzle
+      // highlight the grid with same number to help user solve the puzzle
       if (grid[y][x] != 0 && grid[y][x] == selectedNumber){
-        fill("brown");
+        fill(205,188,188);
         square(x*cellSideLength,y*cellSideLength,cellSideLength);
       }
       
@@ -134,7 +132,7 @@ function drawGrid(){
       if (foundRepeat){
         fill("red");
         strokeWeight(0);
-        square(a*cellSideLength,b*cellSideLength,cellSideLength);
+        square(xSelected*cellSideLength,ySelected*cellSideLength,cellSideLength);
       }
       
       // draw verical split line
@@ -148,11 +146,10 @@ function drawGrid(){
 
 function displayNumber(){
   
-
   for (let y=0;y<9;y++){
     for (let x=0;x<9;x++){
 
-      // puts numbers in grid onto the screen, 0 excluded
+      // displays numbers in grid onto the screen with 0 as an exception
       if (grid[y][x] !== 0){
         fill("black");
         textSize(cellSideLength*0.9);
@@ -168,8 +165,8 @@ function mouseClicked(){
   let x = Math.floor(mouseX/cellSideLength);
   let y = Math.floor(mouseY/cellSideLength);
   
-  // set grid location  and value as global value for repeat detection 
-  // and draw grid
+  // set the grid location and value as global value for repeat detection 
+  // and highlight the selected grid
   selectedGrid[0] = x;
   selectedGrid[1] = y;
 
@@ -184,6 +181,7 @@ function mouseClicked(){
     foundRepeat = false;
   }
 
+  // value to unselect a grid
   lastgrid[0] = x;
   lastgrid[1] = y;
 
@@ -233,7 +231,7 @@ function checkHorRepeat(){
 
 function checkVerRepeat(){
 
-  // check if the number in selected grid repeats in the same colomn
+  // check if the number in selected grid repeats in the same column
   let x = selectedGrid[0];
   verRepeat = false;
   for(let y=0;y<9;y++){
@@ -268,8 +266,7 @@ function keyTyped(){
     // runs only when a number between 1-9 is typed
     if (key == i){
 
-
-      // check for repeat when a key between 1-9 is typed and a grid
+      // check for repeat when a key between 1-9 is typed and if a grid
       // is selected
       if (ischosen){
         if (defaultGrid[selectedGrid[1]][selectedGrid[0]] === 0 ){
@@ -280,12 +277,15 @@ function keyTyped(){
         }
       }
     }
-    // if the key pressed is space, it clears the value in the grid
   }
 
-
+    // if the key pressed is space, it clears the value in the grid
   if (keyEntered === " " && defaultGrid[selectedGrid[1]][selectedGrid[0]] === 0){
     grid[selectedGrid[1]][selectedGrid[0]] = keyEntered;
   }  
 
+  // ends the game if f is pressed
+  if (keyEntered === "f"){
+    grid = answerGrid;
+  }
 }
