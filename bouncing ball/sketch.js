@@ -44,8 +44,8 @@ function moveBall(){
 
 function displayBall(){
   for (let ball of bouncingBalls){
-    noStroke()
-    fill(ball.theColor)
-    ellipse(ball.x, ball.y, ball.diameter,ball.diameter)
+    noStroke();
+    fill(ball.theColor);
+    ellipse(ball.x, ball.y, ball.diameter,ball.diameter);
   }
 }
