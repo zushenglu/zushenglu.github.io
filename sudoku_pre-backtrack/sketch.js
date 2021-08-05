@@ -160,7 +160,7 @@ function displayNumber(){
 }
 
 function mouseClicked(){
-
+  console.log("hehe")
   // locate the grid that is clicked
   let x = Math.floor(mouseX/cellSideLength);
   let y = Math.floor(mouseY/cellSideLength);
